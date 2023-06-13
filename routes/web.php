@@ -28,7 +28,7 @@ Route::post('/login', [LoginController::class, 'login']);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('/bahan', [HomeController::class, 'bahan'])->name('bahan');
+    Route::get('/barang', [HomeController::class, 'barang'])->name('barang');
 
     Route::get('/logout', [LoginController::class, 'logout']);
     Route::get('/profil/password', [ProfilController::class, 'password']);

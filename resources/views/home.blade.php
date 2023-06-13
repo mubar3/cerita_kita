@@ -6,7 +6,7 @@
 
 {{-- start navigasi --}}
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-4">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Penjualan Harian</h5>
@@ -16,7 +16,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-8">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Penjualan Produk</h5>

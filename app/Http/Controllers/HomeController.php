@@ -74,55 +74,16 @@ class HomeController extends Controller
         ]);
     }
 
-    public function bahan()
+    public function barang()
     {
-        // $data=contact::all();
-        // print_r($data);
-        // die();
-        return view('menu.bahan')->with([
+        // return Db::table('toko_barangs')->where('status','y')->get();
+        return view('menu.barang')->with([
             'tMulai'    => date('Y-m-01'),
             'tAkhir'    => date('Y-m-d'),
             'tmulaiNewuser' => date('Y-m'),
             'page_title'     => $this->title,
             'logo' => $this->logo,
-        ]);
-    }
-
-    public function bulk()
-    {
-
-        return view('menu.bulk')->with([
-            'tMulai'    => date('Y-m-01'),
-            'tAkhir'    => date('Y-m-d'),
-            'tmulaiNewuser' => date('Y-m'),
-        ]);
-    }
-
-    public function contact()
-    {
-        return view('menu.contact')->with([
-            'tMulai'    => date('Y-m-01'),
-            'tAkhir'    => date('Y-m-d'),
-            'tmulaiNewuser' => date('Y-m'),
-        ]);
-    }
-
-    public function api_wa()
-    {
-        return view('menu.api_wa')->with([
-            'tMulai'    => date('Y-m-01'),
-            'tAkhir'    => date('Y-m-d'),
-            'tmulaiNewuser' => date('Y-m'),
-        ]);
-    }
-
-    public function history()
-    {
-         $data=api_was::all();
-        return view('menu.history', compact('data'))->with([
-            'tMulai'    => date('Y-m-01'),
-            'tAkhir'    => date('Y-m-d'),
-            'tmulaiNewuser' => date('Y-m'),
+            'barang' => Db::table('toko_barangs')->where('status','y')->get(),
         ]);
     }
 

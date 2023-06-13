@@ -26,9 +26,9 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('bahan') }}" class="nav-link">
+          <a href="{{ route('barang') }}" class="nav-link">
             <i class="link-icon" data-feather="send"></i>
-            <span class="link-title">Bahan</span>
+            <span class="link-title">Barang</span>
           </a>
         </li>
         <li class="nav-item">
