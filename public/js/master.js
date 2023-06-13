@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    $('.select2').select2();
+    // $('.select2').select2();
 
     $('.data-list').on('click','.hapus_data_list', function(e){
         e.preventDefault();

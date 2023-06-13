@@ -30,6 +30,36 @@ class HomeController extends Controller
 
     public function index()
     {
+        $ph=Db::table('toko2barang_trans')
+            ->select(
+                Db::raw('sum(jumlah) as penjualan'),
+                Db::raw('DAYNAME(created_at) AS hari'),
+            )
+            ->groupBy('hari')
+            ->orderBy('hari')
+            ->get();
+        $label_ph=[];
+        $value_ph=[];
+        foreach ($ph as $key) {
+            array_push($label_ph, $this->convertDayToIndonesian($key->hari));
+            array_push($value_ph, $key->penjualan);
+        }
+
+        $pp=Db::table('toko2barang_trans')
+            ->select(
+                Db::raw('sum(toko2barang_trans.jumlah) as penjualan'),
+                'toko_barangs.nama',
+            )
+            ->join('toko_barangs','toko_barangs.id','=','toko2barang_trans.barang_id')
+            ->groupBy('toko_barangs.nama')
+            ->orderBy('toko_barangs.nama')
+            ->get();
+        $label_pp=[];
+        $value_pp=[];
+        foreach ($pp as $key) {
+            array_push($label_pp, $key->nama);
+            array_push($value_pp, $key->penjualan);
+        }
 
         return view('home')->with([
             'tMulai'    => date('Y-m-01'),
@@ -37,6 +67,10 @@ class HomeController extends Controller
             'tmulaiNewuser' => date('Y-m'),
             'page_title'     => $this->title,
             'logo' => $this->logo,
+            'label_ph' => $label_ph,
+            'value_ph' => $value_ph,
+            'label_pp' => $label_pp,
+            'value_pp' => $value_pp,
         ]);
     }
 

@@ -21,7 +21,7 @@
         </li> -->
         <li class="nav-item">
           <a href="{{ route('home') }}" class="nav-link">
-            <i class="link-icon" data-feather="send"></i>
+            <i class="link-icon" data-feather="hard-drive"></i>
             <span class="link-title">Home</span>
           </a>
         </li>

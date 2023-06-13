@@ -10,6 +10,36 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    public $title='Cer kit';
+    public $title='Cerita Kita';
     public $logo='logo.jpg';
+
+    function convertDayToIndonesian($day) {
+        $englishDays = array(
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday'
+        );
+        
+        $indonesianDays = array(
+            'Senin',
+            'Selasa',
+            'Rabu',
+            'Kamis',
+            'Jumat',
+            'Sabtu',
+            'Minggu'
+        );
+        
+        $index = array_search($day, $englishDays);
+        
+        if ($index !== false) {
+            return $indonesianDays[$index];
+        } else {
+            return 'Invalid day';
+        }
+    }
 }
