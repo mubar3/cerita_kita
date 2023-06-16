@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/get_penjualan_harian', [App\Http\Controllers\AjaxController::class, 'get_penjualan_harian']);
 Route::post('/get_penjualan_produk', [App\Http\Controllers\AjaxController::class, 'get_penjualan_produk']);
+Route::post('/get_penjualan_jam', [App\Http\Controllers\AjaxController::class, 'get_penjualan_jam']);

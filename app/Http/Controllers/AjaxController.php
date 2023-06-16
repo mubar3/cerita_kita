@@ -84,4 +84,41 @@ class AjaxController extends Controller
             return response()->json(['status'=>false,'message'=>'Terjadi Kesalahan dalam penyimpanan data']);
         }
     }
+    public function get_penjualan_jam(Request $data)
+    {
+        $validator = Validator::make($data->all(),[
+            'toko_id' => 'required'
+        ]);
+        if($validator->fails()){      
+            return response()->json(['status'=>false,'message'=>$validator->errors()]);
+        }
+
+        $pj=Db::table('toko2barang_trans')
+            ->select(
+                Db::raw('sum(toko2barang_trans.jumlah) as penjualan'),
+                // Db::raw('HOUR(toko2barang_trans.created_at) AS jam'),
+                Db::raw('DATE_FORMAT(toko2barang_trans.created_at, "%H : 00") AS jam'),
+            )
+            ->join('toko2_trans','toko2_trans.id','=','toko2barang_trans.trans_id')
+            ->where('toko2_trans.toko_id',$data->toko_id)
+            ->groupBy('jam')
+            ->orderBy('jam')
+            ->get();
+        $label_pj=[];
+        $value_pj=[];
+        foreach ($pj as $key) {
+            array_push($label_pj, $key->jam);
+            array_push($value_pj, $key->penjualan);
+        }
+
+        // DB::beginTransaction();
+        try {
+
+            // DB::commit();
+            return response()->json(['status'=>true, 'label'=>$label_pj, 'value'=>$value_pj]);
+        } catch (Exception $e) {
+            // DB::rollBack();
+            return response()->json(['status'=>false,'message'=>'Terjadi Kesalahan dalam penyimpanan data']);
+        }
+    }
 }
