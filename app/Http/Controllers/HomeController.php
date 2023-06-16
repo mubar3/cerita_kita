@@ -58,7 +58,13 @@ class HomeController extends Controller
             'page_title'     => $this->title,
             'logo' => $this->logo,
             'logo2' => $this->logo2,
-            'barang' => Db::table('toko_barangs')->where('status','y')->get(),
+            'tokos' => Toko_user::select(
+                        'tokos.*'
+                    )
+                    ->join('tokos','tokos.id','=','toko_users.toko_id')
+                    ->where('toko_users.user_id',Auth::user()->id)
+                    ->where('toko_users.status','y')
+                    ->get(),
         ]);
     }
 

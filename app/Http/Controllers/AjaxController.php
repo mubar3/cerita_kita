@@ -121,4 +121,89 @@ class AjaxController extends Controller
             return response()->json(['status'=>false,'message'=>'Terjadi Kesalahan dalam penyimpanan data']);
         }
     }
+
+    public function get_barang(Request $data)
+    {
+        $validator = Validator::make($data->all(),[
+            'toko_id' => 'required'
+        ]);
+        if($validator->fails()){      
+            return response()->json(['status'=>false,'message'=>$validator->errors()]);
+        }
+
+        $barang=Db::table('toko_barangs')->where('toko_id',$data->toko_id)->get();
+
+        // DB::beginTransaction();
+        try {
+
+            // DB::commit();
+            return response()->json(['status'=>true, 'data'=>$barang]);
+        } catch (Exception $e) {
+            // DB::rollBack();
+            return response()->json(['status'=>false,'message'=>'Terjadi Kesalahan dalam penyimpanan data']);
+        }
+    }
+
+    public function get_bahan(Request $data)
+    {
+        $validator = Validator::make($data->all(),[
+            'barang_id' => 'required',
+            'toko_id' => 'required',
+        ]);
+        if($validator->fails()){      
+            return response()->json(['status'=>false,'message'=>$validator->errors()]);
+        }
+
+        $bahan=Db::table('stok_bahans')
+            ->select(
+                'stok_bahans.*',
+                'bahans.nama',
+            )   
+            ->join('bahans','bahans.id','=','stok_bahans.bahan_id')
+            ->where('stok_bahans.barang_id',$data->barang_id)
+            ->get();
+
+        $data_bahan=Db::table('bahans')->where('toko_id',$data->toko_id)->get();
+
+        // DB::beginTransaction();
+        try {
+
+            // DB::commit();
+            return response()->json(['status'=>true, 'data'=>$bahan, 'data_bahan'=>$data_bahan]);
+        } catch (Exception $e) {
+            // DB::rollBack();
+            return response()->json(['status'=>false,'message'=>'Terjadi Kesalahan dalam penyimpanan data']);
+        }
+    }
+
+    public function save_bahan(Request $data) 
+    {
+        $validator = Validator::make($data->all(),[
+            'takar' => 'required',
+            'bahan' => 'required',
+            'barang_id' => 'required',
+        ]);
+        if($validator->fails()){      
+            return response()->json(['status'=>false,'message'=>$validator->errors()]);
+        }
+        // return $data->takar[1];
+        
+        DB::beginTransaction();
+        try {
+            $bahan=Db::table('stok_bahans')->where('barang_id',$data->barang_id)->delete();
+            for ($i=0; $i < count($data->takar); $i++) { 
+                Db::table('stok_bahans')->insert([
+                    'bahan_id' => $data->bahan[$i],
+                    'barang_id' => $data->barang_id,
+                    'takar_gr' => $data->takar[$i],
+                ]);
+            }
+
+            DB::commit();
+            return response()->json(['status'=>true, 'message'=>'Berhasil']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['status'=>false,'message'=>'Terjadi Kesalahan dalam penyimpanan data']);
+        }
+    }
 }
