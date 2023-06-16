@@ -1,7 +1,7 @@
 <nav class="sidebar">
     <div class="sidebar-header">
-      <a style="padding-top: 10px;" href="#" class="sidebar-brand">
-        <img src="{{ url('storage/'.$logo) }}" width="70%">
+      <a style="padding-top: 0px;" href="#" class="sidebar-brand">
+        <img src="{{ url('storage/'.$logo2) }}" width="50%">
       </a>
       <div class="sidebar-toggler not-active">
         <span></span>

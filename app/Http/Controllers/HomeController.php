@@ -37,6 +37,7 @@ class HomeController extends Controller
             'tmulaiNewuser' => date('Y-m'),
             'page_title'     => $this->title,
             'logo' => $this->logo,
+            'logo2' => $this->logo2,
             'tokos' => Toko_user::select(
                         'tokos.*'
                     )
@@ -56,6 +57,7 @@ class HomeController extends Controller
             'tmulaiNewuser' => date('Y-m'),
             'page_title'     => $this->title,
             'logo' => $this->logo,
+            'logo2' => $this->logo2,
             'barang' => Db::table('toko_barangs')->where('status','y')->get(),
         ]);
     }

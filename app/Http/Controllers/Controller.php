@@ -12,6 +12,7 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     public $title='Cerita Kita';
     public $logo='logo.jpg';
+    public $logo2='logo2.jpg';
 
     function convertDayToIndonesian($day) {
         $englishDays = array(
