@@ -13,7 +13,7 @@ class LoginController extends Controller
     public function index()
     {
         if (Auth::check()) {
-            return redirect(route('sender'));
+            return redirect(route('home'));
         }
 
         $validator = JSvalidation::make([
