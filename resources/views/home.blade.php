@@ -210,7 +210,7 @@
                 toko_id : this.value,
             },
             success : function(data){
-                console.log(data)
+                // console.log(data)
                 if(data.status){
                     chart2.updateOptions({
                         series: [{
