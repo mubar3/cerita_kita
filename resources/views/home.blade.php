@@ -322,7 +322,7 @@
                     $('#keuntungan_bersih').html(formatRp(data.data.keuntungan_bersih))
                     $('#keuntungan_kotor').html(formatRp(data.data.keuntungan_kotor))
                     $('#sewa').html(formatRp(data.data.biaya_sewa))
-                    $('#gaji').html((data.data.total_gaji))
+                    $('#gaji').html(formatRp(data.data.total_gaji))
                 }else{
                     $('#keuntungan_bersih').html('0')
                     $('#keuntungan_kotor').html('0')
