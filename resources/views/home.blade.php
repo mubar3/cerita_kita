@@ -101,7 +101,9 @@
 
 <script>
     
-    document.getElementById('tgl_awal').valueAsDate = new Date();
+    // date one month ago
+    var formattedDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, new Date().getDate()).toISOString().slice(0, 10);
+    $('#tgl_awal').val(formattedDate);
     document.getElementById('tgl_akhir').valueAsDate = new Date();
     
     $('#loading').hide();
@@ -121,9 +123,9 @@
         }
     }
 
-    var chart = new ApexCharts(document.querySelector("#chartph"), options);
+    var chart0 = new ApexCharts(document.querySelector("#chartph"), options);
 
-    chart.render();
+    chart0.render();
 </script>
 <script>
     var options = {
@@ -178,17 +180,38 @@
 
 <script type="text/javascript">
     $('#toko').change(function() {
+        chart()
+        report()
+    });
+    $("#tgl_awal").change(function() {
+        chart()
+        report()
+    });
+    $("#tgl_awal").change(function() {
+        chart()
+        report()
+    });
+    $("#keuntungan").change(function() {
+        chart()
+        report()
+    });
+
+
+    function chart(){
         $('#loading').show();
         
         $.ajax({
             type : 'post',
             url : '{{ url('/api/get_penjualan_harian') }}',
             data : {
-                toko_id : this.value,
+                toko_id : $('#toko').val(),
+                tanggal_awal : $('#tgl_awal').val(),
+                tanggal_akhir : $('#tgl_akhir').val(),
             },
             success : function(data){
+                // console.log(data)
                 if(data.status){
-                    chart.updateOptions({
+                    chart0.updateOptions({
                         series: [{
                             name: 'penjualan',
                             data: data.value
@@ -198,7 +221,7 @@
                         }
                     });
                 }else{
-                    chart.updateOptions({
+                    chart0.updateOptions({
                         series: [{
                             name: 'penjualan',
                             data: []
@@ -216,7 +239,9 @@
             type : 'post',
             url : '{{ url('/api/get_penjualan_produk') }}',
             data : {
-                toko_id : this.value,
+                toko_id : $('#toko').val(),
+                tanggal_awal : $('#tgl_awal').val(),
+                tanggal_akhir : $('#tgl_akhir').val(),
             },
             success : function(data){
                 if(data.status){
@@ -248,7 +273,9 @@
             type : 'post',
             url : '{{ url('/api/get_penjualan_jam') }}',
             data : {
-                toko_id : this.value,
+                toko_id : $('#toko').val(),
+                tanggal_awal : $('#tgl_awal').val(),
+                tanggal_akhir : $('#tgl_akhir').val(),
             },
             success : function(data){
                 // console.log(data)
@@ -276,21 +303,9 @@
                 $('#loading').hide();
             },
         });
-
-        report()
-        
-    });
-    $("#tgl_awal").change(function() {
-        report()
-    });
-    $("#tgl_awal").change(function() {
-        report()
-    });
-    $("#keuntungan").change(function() {
-        report()
-    });
-
+    }
     function report() {
+        $('#loading').show();
         $.ajax({
             type : 'post',
             url : '{{ url('/api/report') }}',

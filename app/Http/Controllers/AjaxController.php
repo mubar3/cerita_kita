@@ -13,7 +13,9 @@ class AjaxController extends Controller
     public function get_penjualan_harian(Request $data)
     {
         $validator = Validator::make($data->all(),[
-            'toko_id' => 'required'
+            'toko_id' => 'required',
+            'tanggal_awal' => 'required',
+            'tanggal_akhir' => 'required',
         ]);
         if($validator->fails()){      
             return response()->json(['status'=>false,'message'=>$validator->errors()]);
@@ -26,6 +28,7 @@ class AjaxController extends Controller
             )
             ->join('toko2_trans','toko2_trans.id','=','toko2barang_trans.trans_id')
             ->where('toko2_trans.toko_id',$data->toko_id)
+            ->whereBetween('toko2_trans.created_at',[$data->tanggal_awal,Carbon::parse($data->tanggal_akhir)->addDay()])
             ->groupBy('hari')
             ->orderBy('hari')
             ->get();
@@ -50,7 +53,9 @@ class AjaxController extends Controller
     public function get_penjualan_produk(Request $data)
     {
         $validator = Validator::make($data->all(),[
-            'toko_id' => 'required'
+            'toko_id' => 'required',
+            'tanggal_awal' => 'required',
+            'tanggal_akhir' => 'required',
         ]);
         if($validator->fails()){      
             return response()->json(['status'=>false,'message'=>$validator->errors()]);
@@ -64,6 +69,7 @@ class AjaxController extends Controller
             ->join('toko_barangs','toko_barangs.id','=','toko2barang_trans.barang_id')
             ->join('toko2_trans','toko2_trans.id','=','toko2barang_trans.trans_id')
             ->where('toko2_trans.toko_id',$data->toko_id)
+            ->whereBetween('toko2_trans.created_at',[$data->tanggal_awal,Carbon::parse($data->tanggal_akhir)->addDay()])
             ->groupBy('toko_barangs.nama')
             ->orderBy('toko_barangs.nama')
             ->get();
@@ -87,7 +93,9 @@ class AjaxController extends Controller
     public function get_penjualan_jam(Request $data)
     {
         $validator = Validator::make($data->all(),[
-            'toko_id' => 'required'
+            'toko_id' => 'required',
+            'tanggal_awal' => 'required',
+            'tanggal_akhir' => 'required',
         ]);
         if($validator->fails()){      
             return response()->json(['status'=>false,'message'=>$validator->errors()]);
@@ -101,6 +109,7 @@ class AjaxController extends Controller
             )
             ->join('toko2_trans','toko2_trans.id','=','toko2barang_trans.trans_id')
             ->where('toko2_trans.toko_id',$data->toko_id)
+            ->whereBetween('toko2_trans.created_at',[$data->tanggal_awal,Carbon::parse($data->tanggal_akhir)->addDay()])
             ->groupBy('jam')
             ->orderBy('jam')
             ->get();
