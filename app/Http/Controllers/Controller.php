@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Session;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -42,5 +44,14 @@ class Controller extends BaseController
         } else {
             return 'Invalid day';
         }
+    }
+
+    public function get_session()
+    {
+        $code=Session::getId();
+        if (Db::table('users')->where('session', $code)->exists()) {
+            $this->get_session();
+        }
+        return $code;   
     }
 }

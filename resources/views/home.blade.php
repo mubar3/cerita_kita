@@ -18,9 +18,47 @@
                     <option value="{{$data->id}}" >{{$data->nama}}</option>
                     @endforeach
                 </select> 
+                <br>
+                <br>
+                <h5 class="card-title">Tanggal awal</h5>
+                <input id="tgl_awal" type="date" class="form-control">
+                <br>
+                <h5 class="card-title">Tanggal akhir</h5>
+                <input id="tgl_akhir" type="date" class="form-control">
+                <br>
+                <h5 class="card-title">Keuntungan (%)</h5>
+                <input id="keuntungan" type="text" class="form-control" value="50">
                 <div id="loading">
                     <img width="20%" src="{{ url('storage/'.'loading.gif' )}}" alt="userr">
                 </div>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Report</h5>
+                <table>
+                    <tr>
+                        <td>Keuntungan Bersih</td>
+                        <td>:</td>
+                        <td id="keuntungan_bersih">0</td>
+                    </tr>
+                    <tr>
+                        <td>Keuntungan Kotor</td>
+                        <td>:</td>
+                        <td id="keuntungan_kotor">0</td>
+                    </tr>
+                    <tr>
+                        <td>Sewa</td>
+                        <td>:</td>
+                        <td id="sewa">0</td>
+                    </tr>
+                    <tr>
+                        <td>Gaji karyawan</td>
+                        <td>:</td>
+                        <td id="gaji">0</td>
+                    </tr>
+                </table>
             </div>
         </div>
         <br>
@@ -62,6 +100,9 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 <script>
+    
+    document.getElementById('tgl_awal').valueAsDate = new Date();
+    document.getElementById('tgl_akhir').valueAsDate = new Date();
     
     $('#loading').hide();
 
@@ -235,8 +276,37 @@
                 $('#loading').hide();
             },
         });
+        
+        $.ajax({
+            type : 'post',
+            url : '{{ url('/api/report') }}',
+            data : {
+                toko_id : this.value,
+                tgl_awal : $('#tgl_awal').val(),
+                tgl_akhir : $('#tgl_akhir').val(),
+                keuntungan : $('#keuntungan').val(),
+            },
+            success : function(data){
+                if(data.status){
+                    // console.log(data)
+                    $('#keuntungan_bersih').html(formatRp(data.data.keuntungan_bersih))
+                    $('#keuntungan_kotor').html(formatRp(data.data.keuntungan_kotor))
+                    $('#sewa').html(formatRp(data.data.biaya_sewa))
+                    $('#gaji').html((data.data.total_gaji))
+                }
+                $('#loading').hide();
+            },
+        });
 
     });
+
+    function formatRp(amount, locale = "id-ID", currency = "IDR") {
+        const number = parseFloat(amount);
+        return number.toLocaleString(locale, {
+        style: "currency",
+        currency: currency,
+        });
+    }
 </script>
 
 @endsection

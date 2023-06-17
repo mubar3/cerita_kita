@@ -206,4 +206,55 @@ class AjaxController extends Controller
             return response()->json(['status'=>false,'message'=>'Terjadi Kesalahan dalam penyimpanan data']);
         }
     }
+
+    public function report(Request $data)  
+    {
+        $validator = Validator::make($data->all(),[
+            'toko_id' => 'required',
+            'tgl_awal' => 'required',
+            'tgl_akhir' => 'required',
+            'keuntungan' => 'required',
+        ]);
+        if($validator->fails()){      
+            return response()->json(['status'=>false,'message'=>$validator->errors()]);
+        }
+        
+        // DB::beginTransaction();
+        try {
+            $user=Db::table('users')
+                ->where('toko_id',$data->toko_id)
+                ->where('jenis','utama')
+                ->where('tipe','mobile')
+                ->first();
+            if(!$user){
+                $session=$this->get_session();
+                $user->update([
+                    'session' => $session
+                ]);
+            }else{
+                $session=$user->session;
+            }
+
+            try {
+                $response = Http::post(env('WS_URL').'/api/report', [
+                    'session' => $session,
+                    'tanggal_awal' => $data->tgl_awal,
+                    'tanggal_akhir' => $data->tgl_akhir,
+                    'keuntungan' => $data->keuntungan,
+                ]);
+            } catch(\Illuminate\Http\Client\ConnectionException $e)
+            {
+                return response()->json(['status'=>false, 'message'=>'Terjadi Kesalahan dalam penyimpanan data']);
+            }
+
+            $response = json_decode($response);
+
+            // DB::commit();
+            return response()->json(['status'=>true, 'data'=>$response]);
+        } catch (Exception $e) {
+            // DB::rollBack();
+            return response()->json(['status'=>false,'message'=>'Terjadi Kesalahan dalam penyimpanan data']);
+        }
+        
+    }
 }
