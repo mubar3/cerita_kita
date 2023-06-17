@@ -187,7 +187,7 @@
         chart()
         report()
     });
-    $("#tgl_awal").change(function() {
+    $("#tgl_akhir").change(function() {
         chart()
         report()
     });
