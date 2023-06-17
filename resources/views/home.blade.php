@@ -276,12 +276,27 @@
                 $('#loading').hide();
             },
         });
+
+        report()
         
+    });
+    $("#tgl_awal").change(function() {
+        report()
+    });
+    $("#tgl_awal").change(function() {
+        report()
+    });
+    $("#keuntungan").change(function() {
+        report()
+    });
+
+    function report() {
         $.ajax({
             type : 'post',
             url : '{{ url('/api/report') }}',
             data : {
-                toko_id : this.value,
+                // toko_id : this.value,
+                toko_id : $('#toko').val(),
                 tgl_awal : $('#tgl_awal').val(),
                 tgl_akhir : $('#tgl_akhir').val(),
                 keuntungan : $('#keuntungan').val(),
@@ -293,12 +308,17 @@
                     $('#keuntungan_kotor').html(formatRp(data.data.keuntungan_kotor))
                     $('#sewa').html(formatRp(data.data.biaya_sewa))
                     $('#gaji').html((data.data.total_gaji))
+                }else{
+                    $('#keuntungan_bersih').html('0')
+                    $('#keuntungan_kotor').html('0')
+                    $('#sewa').html('0')
+                    $('#gaji').html('0')
+
                 }
                 $('#loading').hide();
             },
         });
-
-    });
+    }
 
     function formatRp(amount, locale = "id-ID", currency = "IDR") {
         const number = parseFloat(amount);
