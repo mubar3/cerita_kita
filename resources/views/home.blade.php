@@ -101,8 +101,16 @@
 
 <script>
     
+    // date one month ago
+    // var formattedDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, new Date().getDate()).toISOString().slice(0, 10);
+    // $('#tgl_awal').val(formattedDate);
+
     // date in day 1
-    document.getElementById('tgl_awal').valueAsDate = new Date(new Date().getFullYear()+'-'+new Date().getMonth()+'-'+1+' 12:00');
+    var currentDate = new Date();
+    currentDate.setDate(1);
+    $('#tgl_awal').val(currentDate.toISOString().slice(0, 10));
+
+    // document.getElementById('tgl_awal').valueAsDate = currentDate;
     document.getElementById('tgl_akhir').valueAsDate = new Date();
     
     $('#loading').hide();
