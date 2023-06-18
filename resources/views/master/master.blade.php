@@ -51,7 +51,32 @@
           tags: true
         });
     });
+
+    function getCurrentDateTime(timezone) {
+        var currentDate = new Date().toLocaleString('en-US', { timeZone: timezone });
+        var dateObj = new Date(currentDate);
+        
+        var year = dateObj.getFullYear();
+        var month = ('0' + (dateObj.getMonth() + 1)).slice(-2);
+        var day = ('0' + dateObj.getDate()).slice(-2);
+        
+        var formattedDate = year + '-' + month + '-' + day;
+        return formattedDate;
+    }
+
+    function getOneDateTime(timezone) {
+        var currentDate = new Date().toLocaleString('en-US', { timeZone: timezone });
+        var dateObj = new Date(currentDate);
+        
+        var year = dateObj.getFullYear();
+        var month = ('0' + (dateObj.getMonth() + 1)).slice(-2);
+        var day = '01';
+        
+        var formattedDate = year + '-' + month + '-' + day;
+        return formattedDate;
+    }
 </script>
+
 
 @yield('my-script','')
 
