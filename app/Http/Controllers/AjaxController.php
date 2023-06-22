@@ -27,6 +27,8 @@ class AjaxController extends Controller
                 Db::raw('DAYNAME(toko2barang_trans.created_at) AS hari'),
             )
             ->join('toko2_trans','toko2_trans.id','=','toko2barang_trans.trans_id')
+            ->join('toko_barangs','toko_barangs.id','=','toko2barang_trans.barang_id')
+            ->where('toko_barangs.is_produk','y')
             ->where('toko2_trans.toko_id',$data->toko_id)
             ->whereBetween('toko2_trans.created_at',[$data->tanggal_awal,Carbon::parse($data->tanggal_akhir)->addDay()])
             ->groupBy('hari')
@@ -68,6 +70,7 @@ class AjaxController extends Controller
             )
             ->join('toko_barangs','toko_barangs.id','=','toko2barang_trans.barang_id')
             ->join('toko2_trans','toko2_trans.id','=','toko2barang_trans.trans_id')
+            ->where('toko_barangs.is_produk','y')
             ->where('toko2_trans.toko_id',$data->toko_id)
             ->whereBetween('toko2_trans.created_at',[$data->tanggal_awal,Carbon::parse($data->tanggal_akhir)->addDay()])
             ->groupBy('toko_barangs.nama')
@@ -108,6 +111,8 @@ class AjaxController extends Controller
                 Db::raw('DATE_FORMAT(toko2barang_trans.created_at, "%H : 00") AS jam'),
             )
             ->join('toko2_trans','toko2_trans.id','=','toko2barang_trans.trans_id')
+            ->join('toko_barangs','toko_barangs.id','=','toko2barang_trans.barang_id')
+            ->where('toko_barangs.is_produk','y')
             ->where('toko2_trans.toko_id',$data->toko_id)
             ->whereBetween('toko2_trans.created_at',[$data->tanggal_awal,Carbon::parse($data->tanggal_akhir)->addDay()])
             ->groupBy('jam')
