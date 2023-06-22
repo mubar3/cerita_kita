@@ -210,6 +210,7 @@ class AjaxController extends Controller
                     'bahan_id' => $data->bahan[$i],
                     'barang_id' => $data->barang_id,
                     'takar_gr' => $data->takar[$i],
+                    'created_at' => Carbon::now(),
                 ]);
             }
 
