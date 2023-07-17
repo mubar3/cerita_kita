@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Qr_code;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Session;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -53,5 +55,40 @@ class Controller extends BaseController
             $this->get_session();
         }
         return $code;   
+    }
+
+    public function generateQrCode()
+    {
+
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersNumber = strlen($characters);
+
+        $code = '';
+
+        while (strlen($code) < 10) {
+            $position = rand(0, $charactersNumber - 1);
+            $character = $characters[$position];
+            $code = $code.$character;
+        }
+
+        if(Qr_code::where('qr',$code)->first()){
+            $this->generateQrCode();
+        }else{
+            return $code;
+        }
+
+    }
+
+    public function get_kupon($qr)
+    {
+        return view('menu.kupon_cek')->with([
+            'qr' => Qr_code::where('qr',$qr)->first()
+        ]);   
+    }
+
+    public function update_kupon(Request $data)
+    {
+        Qr_code::where('qr',$data->qr)->update(['respon' => $data->input]);
+        return $this->get_kupon($data->qr);
     }
 }

@@ -11,6 +11,7 @@ use App\Models\sending;
 use App\Models\MobileAgent;
 use App\Models\Visit;
 use App\Models\Toko_user;
+use App\Models\Qr_code;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -65,6 +66,40 @@ class HomeController extends Controller
                     ->where('toko_users.user_id',Auth::user()->id)
                     ->where('toko_users.status','y')
                     ->get(),
+        ]);
+    }
+
+    public function kupon()
+    {
+        // return Db::table('toko_barangs')->where('status','y')->get();
+        return view('menu.kupon')->with([
+            'tMulai'    => date('Y-m-01'),
+            'tAkhir'    => date('Y-m-d'),
+            'tmulaiNewuser' => date('Y-m'),
+            'page_title'     => $this->title,
+            'logo' => $this->logo,
+            'logo2' => $this->logo2,
+        ]);
+    }
+
+    public function save_kupon(Request $data)
+    {
+        if ($data->hasfile('kupon')) {
+            $data->file('kupon')->move(public_path(), 'kupon'.Auth::user()->id.'.png');
+        }
+
+        return redirect()->back();
+    }
+
+    public function cetak_kupon(Request $data)
+    {
+        for ($i=0; $i < 64; $i++) { 
+            Qr_code::create([
+                'qr' => $this->generateQrCode()
+            ]);
+        }
+        return view('menu.kupon_cetak')->with([
+            'qr' => Qr_code::whereNull('respon')->get()
         ]);
     }
 

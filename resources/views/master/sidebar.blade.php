@@ -32,6 +32,12 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="{{ route('kupon') }}" class="nav-link">
+            <i class="link-icon" data-feather="percent"></i>
+            <span class="link-title">Kupon</span>
+          </a>
+        </li>
+        <li class="nav-item">
           {{-- <a href="{{ route('bulk') }}" class="nav-link">
             <i class="link-icon" data-feather="cast"></i>
             <span class="link-title">Bulk</span>
