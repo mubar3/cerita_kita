@@ -11,7 +11,7 @@
         height: 110px;
         margin-bottom: 6px;
         background-size: 580px 110px;
-        background-image: url({{ asset('kupon12.png') }});
+        background-image: url({{ asset('kupon'.Auth::user()->id.'.png') }});
         ">
             <div style="border: 2px solid white; 
                 border-radius: 5px; 
