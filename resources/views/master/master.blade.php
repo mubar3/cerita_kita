@@ -13,6 +13,8 @@
     <script src="https://kit.fontawesome.com/6e703c102f.js" crossorigin="anonymous"></script>
     <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">  -->
 
+    <!-- fix load http ajax -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
   </head>
   <body class="sidebar-dark">
