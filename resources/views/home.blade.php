@@ -82,6 +82,14 @@
         </div>
         <div class="card">
             <div class="card-body">
+                <h5 class="card-title">Penjualan / tanggal</h5>
+                <div id="chartpt" ></div>
+                {{-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> --}}
+                {{-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
                 <h5 class="card-title">Penjualan / jam</h5>
                 <div id="chartpj" ></div>
                 {{-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> --}}
@@ -164,6 +172,26 @@
     var chart2 = new ApexCharts(document.querySelector("#chartpj"), options);
 
     chart2.render();
+</script>
+<script>
+    var options = {
+        chart: {
+    height: 'auto',
+    width: '100%',
+            type: 'bar'
+        },
+        series: [{
+            name: 'penjualan',
+            data: []
+        }],
+        xaxis: {
+            categories: []
+        }
+    }
+
+    var chart3 = new ApexCharts(document.querySelector("#chartpt"), options);
+
+    chart3.render();
 </script>
 
 
@@ -289,6 +317,41 @@
                     });
                 }else{
                     chart2.updateOptions({
+                        series: [{
+                            name: 'penjualan',
+                            data: []
+                        }],
+                        xaxis: {
+                            categories: []
+                        }
+                    });
+                }
+                $('#loading').hide();
+            },
+        });
+        
+        $.ajax({
+            type : 'post',
+            url : '{{ url('/api/get_penjualan_tanggal') }}',
+            data : {
+                toko_id : $('#toko').val(),
+                tanggal_awal : $('#tgl_awal').val(),
+                tanggal_akhir : $('#tgl_akhir').val(),
+            },
+            success : function(data){
+                // console.log(data)
+                if(data.status){
+                    chart3.updateOptions({
+                        series: [{
+                            name: 'penjualan',
+                            data: data.value
+                        }],
+                        xaxis: {
+                            categories: data.label
+                        }
+                    });
+                }else{
+                    chart3.updateOptions({
                         series: [{
                             name: 'penjualan',
                             data: []

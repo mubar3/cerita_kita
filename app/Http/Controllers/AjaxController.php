@@ -136,6 +136,49 @@ class AjaxController extends Controller
         }
     }
 
+    public function get_penjualan_tanggal(Request $data)
+    {
+        $validator = Validator::make($data->all(),[
+            'toko_id' => 'required',
+            'tanggal_awal' => 'required',
+            'tanggal_akhir' => 'required',
+        ]);
+        if($validator->fails()){      
+            return response()->json(['status'=>false,'message'=>$validator->errors()]);
+        }
+
+        $pt=Db::table('toko2barang_trans')
+            ->select(
+                Db::raw('sum(toko2barang_trans.jumlah) as penjualan'),
+                // Db::raw('HOUR(toko2barang_trans.created_at) AS jam'),
+                Db::raw('DATE(toko2barang_trans.created_at) AS tanggal'),
+            )
+            ->join('toko2_trans','toko2_trans.id','=','toko2barang_trans.trans_id')
+            ->join('toko_barangs','toko_barangs.id','=','toko2barang_trans.barang_id')
+            ->where('toko_barangs.is_produk','y')
+            ->where('toko2_trans.toko_id',$data->toko_id)
+            ->whereBetween('toko2_trans.created_at',[$data->tanggal_awal,Carbon::parse($data->tanggal_akhir)->addDay()])
+            ->groupBy('tanggal')
+            ->orderBy('tanggal')
+            ->get();
+        $label_pt=[];
+        $value_pt=[];
+        foreach ($pt as $key) {
+            array_push($label_pt, $key->tanggal);
+            array_push($value_pt, $key->penjualan);
+        }
+
+        // DB::beginTransaction();
+        try {
+
+            // DB::commit();
+            return response()->json(['status'=>true, 'label'=>$label_pt, 'value'=>$value_pt]);
+        } catch (Exception $e) {
+            // DB::rollBack();
+            return response()->json(['status'=>false,'message'=>'Terjadi Kesalahan dalam penyimpanan data']);
+        }
+    }
+
     public function get_barang(Request $data)
     {
         $validator = Validator::make($data->all(),[
