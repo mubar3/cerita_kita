@@ -17,7 +17,7 @@ class CreateTokoUsersTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('toko_id')->constrained('tokos')->onDelete('cascade');
-            $table->enum('status',['y','n'])->default('y');
+            $table->enum('status',['y','n'])->nullable()->default('y');
             $table->timestamps();
         });
     }
